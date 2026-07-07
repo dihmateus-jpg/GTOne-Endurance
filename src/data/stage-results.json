@@ -1,0 +1,25 @@
+{
+  "_nota": "SEED FICTÍCIO só para testar a vista 'Por Etapa'. Chaveado por code de etapa (E1..E8). Preencher com resultados reais após cada etapa. relegated=3 últimos do Grid A descem; promoted=3 primeiros do Grid B sobem.",
+  "E1": {
+    "gridA": [
+      { "pos": "P1", "name": "Léo Ferraz",    "time": "1:42:18.4" },
+      { "pos": "P2", "name": "Diego Antunes",  "time": "+6.212" },
+      { "pos": "P3", "name": "Marcos Rocha",   "time": "+11.87" },
+      { "pos": "P4", "name": "Bruno Sato",     "time": "+19.04" },
+      { "pos": "P5", "name": "Igor Vasco",     "time": "+24.55" },
+      { "pos": "P6", "name": "Thiago Nunes",   "time": "+30.19", "relegated": true },
+      { "pos": "P7", "name": "Caio Bordin",    "time": "+38.72", "relegated": true },
+      { "pos": "P8", "name": "Rafa Lemos",     "time": "+45.20", "relegated": true }
+    ],
+    "gridB": [
+      { "pos": "P1", "name": "Paulo Vidal",    "time": "1:44:02.1", "promoted": true },
+      { "pos": "P2", "name": "Rui Palma",      "time": "+3.401",    "promoted": true },
+      { "pos": "P3", "name": "Nando Reis",     "time": "+9.988",    "promoted": true },
+      { "pos": "P4", "name": "Dan Coelho",     "time": "+15.20" },
+      { "pos": "P5", "name": "Zé Trindade",    "time": "+22.71" },
+      { "pos": "P6", "name": "Kaká Meira",     "time": "+28.33" },
+      { "pos": "P7", "name": "Vitor Sá",       "time": "+35.10" },
+      { "pos": "P8", "name": "Ary Fontes",     "time": "+41.99" }
+    ]
+  }
+}

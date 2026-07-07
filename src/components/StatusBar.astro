@@ -1,0 +1,44 @@
+---
+---
+
+<div class="statusbar">
+  <span class="statusbar-time">21:47</span>
+  <span class="statusbar-brand">
+    <span class="pulse-dot"></span>
+    GTONE
+  </span>
+</div>
+
+<style>
+  .statusbar {
+    height: var(--h-statusbar);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--pad-screen);
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .statusbar-time {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .statusbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+  }
+</style>

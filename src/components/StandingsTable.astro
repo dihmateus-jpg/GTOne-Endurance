@@ -1,0 +1,340 @@
+---
+import { stages, stageResults } from '../data';
+import type { StandingRow, Stage } from '../data/types';
+
+interface Props {
+  rows: StandingRow[];
+}
+
+const { rows } = Astro.props;
+
+const sorted = [...rows].sort((a, b) => a.pos - b.pos);
+const firstGridBIndex = sorted.findIndex((r) => r.grid === 'B');
+
+const stageByCode = new Map<string, Stage>(stages.map((s) => [s.code, s]));
+const availableStageCodes = Object.keys(stageResults).sort(
+  (a, b) => (stageByCode.get(a)?.index ?? 0) - (stageByCode.get(b)?.index ?? 0)
+);
+
+function moveGlyph(move: number) {
+  if (move > 0) return { glyph: `▲${move}`, cls: 'move-up' };
+  if (move < 0) return { glyph: `▼${Math.abs(move)}`, cls: 'move-down' };
+  return { glyph: '—', cls: 'move-flat' };
+}
+---
+
+<div class="standings">
+  <div class="toggle" role="tablist">
+    <button class="toggle-btn is-active" data-view-btn="geral" role="tab" aria-selected="true">GERAL</button>
+    <button class="toggle-btn" data-view-btn="etapa" role="tab" aria-selected="false">POR ETAPA</button>
+  </div>
+
+  <div data-view-panel="geral">
+    <div class="table-head">
+      <span class="col-pos">POS</span>
+      <span class="col-mov">MOV</span>
+      <span class="col-name">PILOTO</span>
+      <span class="col-pts">PTS</span>
+    </div>
+
+    <ul class="rows">
+      {
+        sorted.map((row, i) => {
+          const move = moveGlyph(row.move);
+          return (
+            <>
+              {i === 0 && <li class="grid-divider">GRID A · ELITE</li>}
+              {i === firstGridBIndex && i !== 0 && <li class="grid-divider">GRID B · ACESSO</li>}
+              <li class="row-item">
+                <button class="row-summary" data-row-toggle={row.id} aria-expanded="false">
+                  <span class="col-pos pos-num">{row.pos}</span>
+                  <span class={`col-mov move ${move.cls}`}>{move.glyph}</span>
+                  <span class="col-name">
+                    <span class="driver-name">{row.name}</span>
+                    <span class={`badge badge-grid-${row.grid.toLowerCase()}`}>GRID {row.grid}</span>
+                  </span>
+                  <span class="col-pts pts-num">{row.points}</span>
+                  <span class="chevron" aria-hidden="true">›</span>
+                </button>
+                <div class="row-detail" data-row-detail={row.id} hidden>
+                  <div class="stat">
+                    <span class="stat-value">{row.wins}</span>
+                    <span class="label-mono">VITÓRIAS</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-value">{row.podiums}</span>
+                    <span class="label-mono">PÓDIOS</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-value">{row.bestFinish}</span>
+                    <span class="label-mono">MELHOR</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-value">{row.penalties}</span>
+                    <span class="label-mono">PENAL.</span>
+                  </div>
+                  <div class="stat stat-gap">
+                    <span class="stat-value">{row.gapToLeader}</span>
+                    <span class="label-mono">GAP P/ LÍDER</span>
+                  </div>
+                </div>
+              </li>
+            </>
+          );
+        })
+      }
+    </ul>
+  </div>
+
+  <div data-view-panel="etapa" hidden>
+    <div class="stage-chips">
+      {
+        availableStageCodes.map((code, i) => (
+          <button
+            class:list={['chip', { 'is-active': i === 0 }]}
+            data-stage-chip={code}
+          >
+            {code}
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      availableStageCodes.map((code, i) => {
+        const stage = stageByCode.get(code);
+        const result = stageResults[code];
+        return (
+          <div class="stage-panel" data-stage-panel={code} hidden={i !== 0}>
+            <p class="label-mono stage-subhead">
+              {code} · {stage?.track} · {stage?.date}
+            </p>
+
+            <p class="grid-divider">GRID A · ELITE</p>
+            <ul class="stage-rows">
+              {result.gridA.map((r) => (
+                <li class="stage-row">
+                  <span class="col-pos">{r.pos}</span>
+                  <span class="col-name">{r.name}</span>
+                  <span class="col-time">{r.time}</span>
+                  {r.relegated && <span class="badge badge-danger">▼ DESCE</span>}
+                </li>
+              ))}
+            </ul>
+
+            <p class="divider-label">PROMOÇÃO / REBAIXAMENTO</p>
+
+            <p class="grid-divider">GRID B · ACESSO</p>
+            <ul class="stage-rows">
+              {result.gridB.map((r) => (
+                <li class="stage-row">
+                  <span class="col-pos">{r.pos}</span>
+                  <span class="col-name">{r.name}</span>
+                  <span class="col-time">{r.time}</span>
+                  {r.promoted && <span class="badge">▲ SOBE</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<script src="./standings-table.js"></script>
+
+<style>
+  .toggle {
+    display: flex;
+    padding: 4px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    margin-bottom: var(--sp-4);
+  }
+
+  .toggle-btn {
+    flex: 1;
+    min-height: 36px;
+    border-radius: var(--r-pill);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+
+  .toggle-btn.is-active {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .table-head {
+    display: grid;
+    grid-template-columns: 32px 44px 1fr 48px 16px;
+    padding: 0 var(--sp-3);
+    margin-bottom: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .grid-divider {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    padding: var(--sp-3) var(--sp-1) var(--sp-1);
+  }
+
+  .row-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    margin-bottom: var(--sp-2);
+    overflow: hidden;
+  }
+
+  .row-summary {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 32px 44px 1fr 48px 16px;
+    align-items: center;
+    min-height: var(--touch-min);
+    padding: var(--sp-2) var(--sp-3);
+    text-align: left;
+  }
+
+  .pos-num {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .move {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .move-up { color: var(--accent); }
+  .move-down { color: var(--danger); }
+  .move-flat { color: var(--text-faint); }
+
+  .col-name {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-width: 0;
+  }
+
+  .driver-name {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .badge-grid-a { background: var(--accent-soft); color: var(--accent); }
+  .badge-grid-b { background: var(--surface-2); color: var(--text-faint); }
+
+  .pts-num {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .chevron {
+    color: var(--text-faint);
+    text-align: right;
+    transition: transform 0.15s ease;
+  }
+
+  .row-summary[aria-expanded='true'] .chevron {
+    transform: rotate(90deg);
+    color: var(--accent);
+  }
+
+  .row-detail {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+    padding: 0 var(--sp-3) var(--sp-3);
+    border-top: 1px solid var(--line);
+    margin-top: var(--sp-1);
+    padding-top: var(--sp-3);
+  }
+
+  .stat-gap {
+    grid-column: span 2;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .stage-chips {
+    display: flex;
+    gap: var(--sp-2);
+    overflow-x: auto;
+    padding-bottom: var(--sp-2);
+    margin-bottom: var(--sp-3);
+  }
+
+  .chip {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: 0 var(--sp-4);
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .chip.is-active {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .stage-subhead {
+    margin-bottom: var(--sp-2);
+  }
+
+  .stage-rows {
+    margin-bottom: var(--sp-2);
+  }
+
+  .stage-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: var(--touch-min);
+    padding: 0 var(--sp-2);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .stage-row .col-name {
+    flex: 1;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .stage-row .col-time {
+    color: var(--text-dim);
+  }
+</style>

@@ -1,0 +1,56 @@
+{
+  "_nota": "Fonte da verdade: REGULAMENTO_ENDURANCE_S5. Parâmetros parametrizados; nada hardcodado nos componentes.",
+  "nome": "Endurance GTOne",
+  "temporada": 5,
+  "ano": 2026,
+  "status": "pre-season",
+  "statusNota": "Temporada ainda não iniciou (E1 em 23/07). Enquanto status='pre-season', a Home esconde 'Resumo da última etapa' e a Classificação mostra estado pré-temporada. Após a E1, mudar para 'em-andamento' e substituir os seeds fictícios por dados reais.",
+
+  "tagline": "Resistência online no GT7. Toda quinta, 22h. Dois grids, oito etapas, uma temporada.",
+  "kicker": "TEMPORADA 05 · 2026",
+
+  "horarios": {
+    "dia": "quinta",
+    "lobby": "21:30",
+    "qualifying": "22:05",
+    "qualifyingDuracaoMin": 5,
+    "corrida": "22:15",
+    "corridaDuracaoMaxMin": 90,
+    "timezone": "America/Sao_Paulo"
+  },
+
+  "regras": {
+    "gridSize": 15,
+    "promoveRebaixa": 3,
+    "descarteEtapas": 2,
+    "descarteNota": "Os 2 piores resultados de cada piloto são descartados; cálculo feito na última etapa (E8).",
+    "grids": {
+      "E1": "Sorteio aleatório da lista de inscritos.",
+      "E2": "Grid A = 15 maiores do ranking; Grid B = 15 menores.",
+      "E3-E8": "Grid A = 12 maiores do ranking + 3 primeiros do Grid B da etapa anterior. Grid B = 12 menores + 3 últimos do Grid A da etapa anterior."
+    },
+    "desempate": [
+      "Maior nº de vitórias (contando A e B)",
+      "Maior nº de participações",
+      "Maior nº de pódios",
+      "Resultado da última corrida"
+    ],
+    "vagaTR": "Vaga reservada à transmissão; não pontua."
+  },
+
+  "pontuacao": {
+    "gridA": [30, 28, 26, 24, 22, 20, 18, 17, 16, 15, 14, 13, 12, 11, 10],
+    "gridB": [20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+    "bonus": { "voltaMaisRapida": 1, "pole": 1 }
+  },
+
+  "links": {
+    "whatsapp": "https://chat.whatsapp.com/CvlBB53jyPxIl22Iw0hUAl?mode=gi_t",
+    "inscricao": "https://forms.gle/vjmAHRZwLn1YjTyJA"
+  },
+
+  "diferido": {
+    "nota": "NÃO implementar no v1 sem pedido explícito. Reservar espaço no layout.",
+    "itens": ["Campeonato de equipes", "Badges / conquistas"]
+  }
+}

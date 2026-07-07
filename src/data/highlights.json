@@ -1,0 +1,11 @@
+{
+  "_nota": "Resumo da última etapa. Em pre-season NÃO há última etapa: lastStage=null e a Home esconde este bloco. O objeto 'exemplo' documenta o shape e serve de seed para ver o bloco durante o build.",
+  "lastStage": null,
+  "exemplo": {
+    "stageCode": "E1",
+    "stageLabel": "ETAPA 1 · INTERLAGOS · 23/07",
+    "pilotoDaNoite":   { "name": "Bruno Sato", "detail": "P1 em Interlagos · volta mais rápida" },
+    "maiorEscalador":  { "name": "Rafa Lemos", "detail": "Subiu 6 posições no geral", "value": "▲6" },
+    "pilotoMaisLimpo": { "name": "Igor Vasco", "detail": "Zero penalidades na etapa", "value": "0 PEN" }
+  }
+}

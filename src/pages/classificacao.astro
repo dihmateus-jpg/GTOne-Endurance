@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import StandingsTable from '../components/StandingsTable.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { season, standings, stages } from '../data';
+
+const isPreSeason = season.status === 'pre-season';
+const firstStage = stages.find((s) => s.index === 1);
+---
+
+<Base title="Classificação" description="Classificação geral e por etapa do Endurance GTOne.">
+  <div class="screen">
+    <div class="classificacao-head">
+      <h1 class="screen-title">Classificação</h1>
+      {
+        !isPreSeason && (
+          <span class="update-tag">
+            <span class="pulse-dot" />
+            ATUAL. {standings.atualizadoAte}
+          </span>
+        )
+      }
+    </div>
+  </div>
+
+  <section class="section">
+    {
+      isPreSeason ? (
+        <div class="empty-state">
+          <span class="kicker">PRÉ-TEMPORADA</span>
+          <p>
+            A classificação começa depois da {firstStage?.code} · {firstStage?.track} ({firstStage?.date}).
+            {' '}Grid inicial definido por {season.regras.grids['E1']?.toLowerCase()}
+          </p>
+        </div>
+      ) : (
+        <StandingsTable rows={standings.rows} />
+      )
+    }
+  </section>
+
+  <WhatsAppCTA />
+</Base>
+
+<style>
+  .classificacao-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+
+  .update-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+</style>

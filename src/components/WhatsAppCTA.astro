@@ -1,0 +1,43 @@
+---
+import { season } from '../data';
+---
+
+<section class="cta">
+  <p class="kicker">ENTRE NO GRID</p>
+  <p class="cta-subtitle">Toda {season.horarios.dia}, {season.horarios.corrida}. Chame no grupo e garanta sua vaga.</p>
+  <a
+    class="btn btn-dark cta-button"
+    href={season.links.whatsapp}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    WHATSAPP DA COMUNIDADE →
+  </a>
+</section>
+
+<style>
+  .cta {
+    margin: var(--sp-5) var(--pad-screen) var(--sp-6);
+    padding: var(--sp-6) var(--sp-5);
+    border-radius: var(--r-card);
+    background: linear-gradient(160deg, var(--accent) 0%, var(--accent-hover) 100%);
+  }
+
+  .cta .kicker {
+    color: var(--bg);
+  }
+
+  .cta-subtitle {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--bg);
+    opacity: 0.85;
+    margin-top: var(--sp-1);
+    max-width: 268px;
+  }
+
+  .cta-button {
+    margin-top: var(--sp-4);
+    width: 100%;
+  }
+</style>

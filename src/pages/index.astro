@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import Countdown from '../components/Countdown.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { season, nextStage, topStandings, highlights } from '../data';
+
+const upcoming = nextStage();
+const top3 = topStandings(3);
+const isPreSeason = season.status === 'pre-season';
+const summary = highlights.lastStage ? highlights.exemplo : null;
+---
+
+<Base title="Início">
+  <section class="hero">
+    <p class="kicker">{season.kicker}</p>
+    <h1 class="hero-title">
+      ENDURANCE<br />GTONE
+    </h1>
+    <p class="hero-season">SEASON {season.temporada}</p>
+    <p class="hero-tagline">{season.tagline}</p>
+
+    {upcoming && <Countdown stage={upcoming} />}
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-label">CAMPEONATO GERAL</span>
+      <a class="section-link" href="/classificacao">VER TABELA →</a>
+    </div>
+
+    {
+      isPreSeason ? (
+        <div class="empty-state">
+          <span class="kicker">PRÉ-TEMPORADA</span>
+          <p>A classificação abre depois da Etapa 1.</p>
+        </div>
+      ) : (
+        <ul class="leaders">
+          {top3.map((row) => (
+            <li class="leader-row">
+              <span class="leader-pos">{row.pos}</span>
+              <span class="leader-name">
+                {row.name}
+                <span class="label-mono">GRID {row.grid}</span>
+              </span>
+              <span class="leader-pts">{row.points}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  {
+    summary && (
+      <section class="section">
+        <div class="section-head">
+          <span class="section-label">RESUMO · {summary.stageLabel}</span>
+        </div>
+        <div class="summary-cards">
+          <div class="card card-gold-border">
+            <p class="label-mono">PILOTO DA NOITE</p>
+            <p class="summary-name">{summary.pilotoDaNoite.name}</p>
+            <p class="summary-detail">{summary.pilotoDaNoite.detail}</p>
+          </div>
+          <div class="card card-accent-border">
+            <p class="label-mono">MAIOR ESCALADOR</p>
+            <p class="summary-name">
+              {summary.maiorEscalador.name} <span class="badge">{summary.maiorEscalador.value}</span>
+            </p>
+            <p class="summary-detail">{summary.maiorEscalador.detail}</p>
+          </div>
+          <div class="card card-accent-border">
+            <p class="label-mono">PILOTO MAIS LIMPO</p>
+            <p class="summary-name">
+              {summary.pilotoMaisLimpo.name} <span class="badge">{summary.pilotoMaisLimpo.value}</span>
+            </p>
+            <p class="summary-detail">{summary.pilotoMaisLimpo.detail}</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <WhatsAppCTA />
+</Base>
+
+<style>
+  .hero {
+    padding: var(--sp-6) var(--pad-screen) var(--sp-4);
+    background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 60%);
+  }
+
+  .hero-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 47px;
+    line-height: 0.88;
+    text-transform: uppercase;
+    margin-top: var(--sp-2);
+    color: var(--text);
+  }
+
+  .hero-season {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--text-dim);
+    max-width: 268px;
+    margin-top: var(--sp-3);
+  }
+
+  .leaders {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+
+  .leader-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: var(--touch-min);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+  }
+
+  .leader-pos {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--accent);
+    width: 28px;
+  }
+
+  .leader-name {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .leader-pts {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .summary-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .summary-name {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: var(--sp-1);
+  }
+
+  .summary-detail {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+</style>

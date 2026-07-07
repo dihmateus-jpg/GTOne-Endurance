@@ -1,0 +1,288 @@
+---
+import Base from '../layouts/Base.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { season, stages } from '../data';
+
+const { regras, pontuacao, horarios } = season;
+const promoveRebaixa = regras.promoveRebaixa;
+const gridFormationRules = Object.entries(regras.grids);
+const [corridaHour, corridaMinute] = horarios.corrida.split(':');
+---
+
+<Base title="Sobre" description="Como funciona o formato da temporada Endurance GTOne.">
+  <div class="screen">
+    <h1 class="screen-title">Como Funciona</h1>
+    <p class="screen-subtitle">O FORMATO DA TEMPORADA</p>
+    <p class="label-mono schedule-line">
+      TODA {horarios.dia.toUpperCase()} · {corridaHour}H{corridaMinute}
+    </p>
+  </div>
+
+  <section class="section">
+    <div class="card grid-diagram">
+      <div class="grid-block grid-block-a">
+        <span class="label-mono">GRID A</span>
+        <span class="grid-block-name">ELITE</span>
+      </div>
+      <div class="grid-diagram-mid">
+        <span class="move-line move-down">▼ descem {promoveRebaixa}</span>
+        <span class="move-line move-up">sobem {promoveRebaixa} ▲</span>
+      </div>
+      <div class="grid-block grid-block-b">
+        <span class="label-mono">GRID B</span>
+        <span class="grid-block-name">ACESSO</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="rule-cards">
+      <div class="card card-accent-border">
+        <p class="rule-title">Janela de box</p>
+        <p class="rule-detail">
+          Parada nos boxes liberada só numa janela de voltas por etapa (definida no calendário de cada corrida) —
+          com exceções para quebra de motor e para chuva.
+        </p>
+      </div>
+
+      <div class="card card-accent-border">
+        <p class="rule-title">Formação dos grids &amp; promoção/rebaixamento</p>
+        <ul class="grid-rules">
+          {
+            gridFormationRules.map(([stageCode, rule]) => (
+              <li>
+                <span class="label-mono grid-rule-code">{stageCode}</span>
+                <span class="rule-detail">{rule}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="card card-accent-border">
+        <p class="rule-title">Descarte de etapas</p>
+        <p class="rule-detail">{regras.descarteNota}</p>
+      </div>
+
+      <div class="card card-accent-border">
+        <p class="rule-title">Pontuação por grid</p>
+        <div class="scoring-columns">
+          <div class="scoring-column">
+            <span class="label-mono">GRID A</span>
+            <ol class="scoring-list">
+              {pontuacao.gridA.map((pts) => <li>{pts}</li>)}
+            </ol>
+          </div>
+          <div class="scoring-column">
+            <span class="label-mono">GRID B</span>
+            <ol class="scoring-list">
+              {pontuacao.gridB.map((pts) => <li>{pts}</li>)}
+            </ol>
+          </div>
+        </div>
+        <p class="rule-detail scoring-bonus">
+          + {pontuacao.bonus.pole} pt pole position · + {pontuacao.bonus.voltaMaisRapida} pt volta mais rápida.
+        </p>
+      </div>
+
+      <div class="card card-accent-border">
+        <p class="rule-title">Vaga TR</p>
+        <p class="rule-detail">{regras.vagaTR}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-label">CALENDÁRIO · {stages.length} ETAPAS</span>
+    </div>
+    <ul class="calendar">
+      {
+        stages.map((stage) => (
+          <li class="calendar-row">
+            <span class="calendar-code">{stage.code}</span>
+            <span class="calendar-track">{stage.track}</span>
+            <span class="calendar-date">{stage.date}</span>
+            {stage.isFinal && <span class="badge badge-gold">FINAL ENDURO</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="card card-accent-border signup-cta">
+      <p class="kicker">AINDA NÃO ESTÁ NO GRID?</p>
+      <p class="rule-detail">Inscrições abertas para a temporada {season.temporada}.</p>
+      <a class="btn signup-button" href={season.links.inscricao} target="_blank" rel="noopener noreferrer">
+        QUERO CORRER →
+      </a>
+    </div>
+  </section>
+
+  <WhatsAppCTA />
+</Base>
+
+<style>
+  .schedule-line {
+    margin-top: var(--sp-2);
+  }
+
+  .grid-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .grid-block {
+    padding: var(--sp-4);
+    border-radius: var(--r-tile);
+    text-align: center;
+  }
+
+  .grid-block-a {
+    background: var(--accent-soft);
+  }
+
+  .grid-block-a .label-mono {
+    color: var(--accent);
+  }
+
+  .grid-block-b {
+    background: var(--surface-2);
+  }
+
+  .grid-block-name {
+    display: block;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .grid-diagram-mid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 var(--sp-2);
+  }
+
+  .move-down { color: var(--danger); }
+  .move-up { color: var(--accent); }
+
+  .rule-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .rule-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .rule-detail {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: var(--sp-1);
+  }
+
+  .grid-rules {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    margin-top: var(--sp-2);
+  }
+
+  .grid-rules li {
+    display: flex;
+    gap: var(--sp-2);
+    align-items: baseline;
+  }
+
+  .grid-rule-code {
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 44px;
+  }
+
+  .scoring-columns {
+    display: flex;
+    gap: var(--sp-5);
+    margin-top: var(--sp-2);
+  }
+
+  .scoring-column {
+    flex: 1;
+  }
+
+  .scoring-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: var(--sp-1);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    padding-left: 1.1em;
+  }
+
+  .scoring-bonus {
+    margin-top: var(--sp-3);
+  }
+
+  .calendar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .calendar-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-height: var(--touch-min);
+    padding: var(--sp-2) var(--sp-1);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .calendar-code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    width: 28px;
+  }
+
+  .calendar-track {
+    flex: 1;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .calendar-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .signup-cta {
+    text-align: left;
+  }
+
+  .signup-button {
+    margin-top: var(--sp-3);
+    width: 100%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+</style>

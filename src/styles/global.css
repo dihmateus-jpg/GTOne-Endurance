@@ -1,0 +1,279 @@
+/* ==========================================================================
+   Endurance GTOne — Season 5
+   Global styles · base reset + layout shell + shared UI primitives
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, figure {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---- App shell ---- */
+
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  position: relative;
+}
+
+.app-content {
+  flex: 1;
+  padding-bottom: calc(var(--h-tabbar) + var(--sp-6));
+}
+
+@media (min-width: 700px) {
+  .app-shell {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .app-shell {
+    max-width: 960px;
+  }
+}
+
+/* ---- Screen header ---- */
+
+.screen {
+  padding: var(--sp-6) var(--pad-screen) var(--sp-2);
+}
+
+.screen-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.screen-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: var(--sp-1);
+}
+
+.section {
+  padding: var(--sp-5) var(--pad-screen);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.section-link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ---- Kicker / labels ---- */
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ---- Cards ---- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: var(--sp-4);
+}
+
+.card-accent-border {
+  border-left: 3px solid var(--accent);
+}
+
+.card-gold-border {
+  border-left: 3px solid var(--gold);
+}
+
+.card-danger-border {
+  border-left: 3px solid var(--danger);
+}
+
+/* ---- Badges / chips / pills ---- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: var(--r-tile);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badge-danger {
+  background: rgba(255, 90, 82, 0.13);
+  color: var(--danger);
+}
+
+.badge-gold {
+  background: rgba(245, 196, 81, 0.14);
+  color: var(--gold);
+}
+
+.pill {
+  border-radius: var(--r-pill);
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---- Buttons ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  padding: 0 var(--sp-5);
+  border-radius: var(--r-tile);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.btn-dark {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+}
+
+/* ---- Pulsing dot ---- */
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pls 1.6s ease-in-out infinite;
+}
+
+/* ---- Divider ---- */
+
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: var(--sp-2) 0;
+}
+
+.divider-label::before,
+.divider-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ---- Empty state ---- */
+
+.empty-state {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-card);
+  padding: var(--sp-6) var(--sp-4);
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.empty-state .kicker {
+  display: block;
+  margin-bottom: var(--sp-2);
+}

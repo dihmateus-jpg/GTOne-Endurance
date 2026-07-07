@@ -1,0 +1,65 @@
+/* ==========================================================================
+   Endurance GTOne — Season 5
+   Design tokens · Direção A "Timing Green" (identidade escolhida)
+   Estética: tela de cronometragem/telemetria. Base grafite quente,
+   verde de timing como único destaque, mono para números/tempos.
+   ========================================================================== */
+
+/* Fontes (Google Fonts) — importar no <head> do layout:
+   Barlow Condensed (títulos/números) · Archivo (corpo) · IBM Plex Mono (dados)
+   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+*/
+
+:root {
+  /* ---- Cores ---- */
+  --bg:            #0a0c0b;   /* fundo das telas */
+  --surface:       #101413;   /* cards, linhas de tabela */
+  --surface-2:     #0e1210;   /* toggles, tiles, chips inativos */
+  --raised:        #151a18;   /* tiles de contagem regressiva */
+  --accent:        #16e08a;   /* verde de timing: CTAs, ativos, Grid A */
+  --accent-hover:  #5cf0b0;   /* hover de links/accent */
+  --accent-soft:   rgba(22,224,138,.13);  /* tint do accent (badges/fundos) */
+  --danger:        #ff5a52;   /* penalidades, ▼ rebaixamento */
+  --gold:          #f5c451;   /* "Piloto da Noite" */
+  --text:          #e9ede9;   /* texto primário */
+  --text-dim:      #8a938f;   /* texto secundário */
+  --text-faint:    #6b746f;   /* labels mono, muted */
+  --line:          rgba(255,255,255,.07);  /* bordas */
+  --line-strong:   rgba(255,255,255,.13);  /* borda de moldura/destaque */
+  --led-off:       #2a322e;   /* LED apagado da tab bar */
+
+  /* ---- Tipografia ---- */
+  --font-title: 'Barlow Condensed', system-ui, sans-serif;  /* títulos e números de destaque */
+  --font-body:  'Archivo', system-ui, sans-serif;           /* corpo */
+  --font-mono:  'IBM Plex Mono', ui-monospace, monospace;   /* tempos, pontos, labels */
+
+  /* ---- Escala (base 4px) ---- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-7: 32px;
+  --pad-screen: 20px;   /* padding lateral das telas (20–22) */
+
+  /* ---- Raio ---- */
+  --r-tile: 9px;    /* tiles/badges */
+  --r-card: 12px;   /* cards */
+  --r-pill: 20px;   /* pills/chips */
+  --r-frame: 38px;  /* moldura do celular (protótipo) */
+
+  /* ---- Sombras / glow ---- */
+  --shadow-frame: 0 26px 64px rgba(0,0,0,.55);
+  --glow-accent:  0 26px 70px rgba(22,224,138,.14);
+  --glow-led:     0 0 9px var(--accent);
+
+  /* ---- Alturas fixas ---- */
+  --h-statusbar: 36px;
+  --h-tabbar:    62px;
+  --h-count-tile: 64px;
+  --h-video-embed: 185px;
+
+  /* ---- Toque ---- */
+  --touch-min: 44px;   /* alvo mínimo (tab bar, linhas de tabela) */
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+@keyframes pls { 0%,100% { opacity: 1 } 50% { opacity: .2 } }

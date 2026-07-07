@@ -1,0 +1,184 @@
+---
+import Base from '../layouts/Base.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { season, stages } from '../data';
+
+const orderedStages = [...stages].sort((a, b) => a.index - b.index);
+---
+
+<Base title="Mídia" description="Vídeos da comunidade Endurance GTOne, enviados pelos próprios pilotos.">
+  <div class="screen">
+    <h1 class="screen-title">Mídia</h1>
+    <p class="screen-subtitle">VÍDEOS DA COMUNIDADE</p>
+  </div>
+
+  <section class="section">
+    <div class="card submit-cta">
+      <p class="kicker">ENVIE SEU VÍDEO PARA SER PUBLICADO</p>
+      <p class="submit-detail">Gravou sua corrida? Manda o link no grupo que a gente publica aqui.</p>
+      <a class="btn btn-dark submit-button" href={season.links.whatsapp} target="_blank" rel="noopener noreferrer">
+        WHATSAPP DA COMUNIDADE →
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    {
+      orderedStages.map((stage) => (
+        <div class="stage-media">
+          <p class="label-mono stage-media-head">
+            ETAPA {stage.index} · {stage.track} · {stage.date}
+          </p>
+          {stage.media.length === 0 ? (
+            <div class="empty-state stage-empty">
+              <p>
+                Ainda sem vídeos desta etapa —{' '}
+                <a href={season.links.whatsapp} target="_blank" rel="noopener noreferrer">
+                  envie o seu no grupo
+                </a>
+                .
+              </p>
+            </div>
+          ) : (
+            <ul class="media-list">
+              {/* youtubeId e author reais vêm de stage.media[] em src/data/stages.json */}
+              {stage.media.map((item) => (
+                <li class="media-row">
+                  <button class="lite-embed" data-yt-id={item.youtubeId} aria-label={`Reproduzir ${item.title}`}>
+                    <img
+                      class="lite-embed-thumb"
+                      src={`https://i.ytimg.com/vi/${item.youtubeId}/hqdefault.jpg`}
+                      alt=""
+                      loading="lazy"
+                    />
+                    <span class="lite-embed-play" aria-hidden="true">▶</span>
+                  </button>
+                  <span class="media-title">{item.title}</span>
+                  {item.author && <span class="media-author">enviado por {item.author}</span>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))
+    }
+  </section>
+
+  <WhatsAppCTA />
+</Base>
+
+<script>
+  function mountEmbed(button: HTMLElement) {
+    const id = button.dataset.ytId;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+    iframe.title = 'YouTube video player';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.className = 'lite-embed-iframe';
+    button.replaceWith(iframe);
+  }
+
+  document.querySelectorAll<HTMLElement>('.lite-embed').forEach((button) => {
+    button.addEventListener('click', () => mountEmbed(button));
+  });
+</script>
+
+<style>
+  .submit-cta {
+    text-align: left;
+  }
+
+  .submit-detail {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin-top: var(--sp-1);
+    max-width: 300px;
+  }
+
+  .submit-button {
+    margin-top: var(--sp-4);
+    width: 100%;
+  }
+
+  .stage-media {
+    margin-bottom: var(--sp-6);
+  }
+
+  .stage-media-head {
+    margin-bottom: var(--sp-2);
+  }
+
+  .stage-empty {
+    padding: var(--sp-4);
+  }
+
+  .stage-empty p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .media-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+
+  .media-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+  }
+
+  .lite-embed {
+    position: relative;
+    height: var(--h-video-embed);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+  }
+
+  .lite-embed-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lite-embed-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .lite-embed-iframe {
+    width: 100%;
+    height: var(--h-video-embed);
+    border: 0;
+    border-radius: var(--r-card);
+  }
+
+  .media-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .media-author {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+</style>

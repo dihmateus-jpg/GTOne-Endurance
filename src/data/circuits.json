@@ -1,0 +1,10 @@
+[
+  { "code": "E1", "name": "Interlagos", "lengthKm": "4.309", "highlight": "A subida do S do Senna separa os corajosos.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E2", "name": "Watkins Glen Long Course", "lengthKm": "5.552", "highlight": "As esses rápidas exigem compromisso total no aro.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E3", "name": "Spa-Francorchamps", "lengthKm": "7.004", "highlight": "Eau Rouge no molhado é fé pura.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E4", "name": "Barcelona-Catalunya GP No Chicane", "lengthKm": "4.627", "highlight": "Sem chicane, a última curva vira arrancada até a reta.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E5", "name": "Yas Marina", "lengthKm": "5.281", "highlight": "Noite em Abu Dhabi: frenagens duras sob a luz artificial.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E6", "name": "Tokyo Express", "lengthKm": "5.500", "highlight": "Muros de concreto e velocidade urbana: erro zero.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E7", "name": "Autopolis", "lengthKm": "4.674", "highlight": "Sobe e desce de montanha que castiga freios e pneus.", "carCategory": "A definir", "isFinal": false, "trackMapUrl": null },
+  { "code": "E8", "name": "Nürburgring Nordschleife", "lengthKm": "20.832", "highlight": "Final enduro: o Inferno Verde de noite, na chuva.", "carCategory": "A definir", "isFinal": true, "trackMapUrl": null }
+]

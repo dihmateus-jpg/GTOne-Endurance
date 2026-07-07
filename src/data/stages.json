@@ -1,0 +1,63 @@
+[
+  {
+    "index": 1, "code": "E1", "date": "23/07", "weekday": "qui",
+    "track": "Interlagos", "circuitCode": "E1",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 2, "code": "E2", "date": "30/07", "weekday": "qui",
+    "track": "Watkins Glen Long Course", "circuitCode": "E2",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 3, "code": "E3", "date": "06/08", "weekday": "qui",
+    "track": "Spa-Francorchamps", "circuitCode": "E3",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 4, "code": "E4", "date": "13/08", "weekday": "qui",
+    "track": "Barcelona-Catalunya GP No Chicane", "circuitCode": "E4",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 5, "code": "E5", "date": "20/08", "weekday": "qui",
+    "track": "Yas Marina", "circuitCode": "E5",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 6, "code": "E6", "date": "27/08", "weekday": "qui",
+    "track": "Tokyo Express", "circuitCode": "E6",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 7, "code": "E7", "date": "03/09", "weekday": "qui",
+    "track": "Autopolis", "circuitCode": "E7",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": false, "status": "agendada",
+    "media": []
+  },
+  {
+    "index": 8, "code": "E8", "date": "10/09", "weekday": "qui",
+    "track": "Nürburgring Nordschleife", "circuitCode": "E8",
+    "carCategory": "A definir", "boxWindow": null,
+    "isFinal": true, "status": "agendada",
+    "media": [],
+    "_mediaExemplo": {
+      "title": "Melhores momentos — envie o seu",
+      "youtubeId": "dQw4w9WgXcQ",
+      "author": "Nome do piloto"
+    }
+  }
+]

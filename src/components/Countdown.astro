@@ -1,0 +1,101 @@
+---
+import { stageDateTime } from '../data';
+import type { Stage } from '../data/types';
+
+interface Props {
+  stage: Stage;
+}
+
+const { stage } = Astro.props;
+const target = stageDateTime(stage);
+---
+
+<div class="countdown" data-target={target.toISOString()}>
+  <p class="label-mono">
+    PRÓXIMA ETAPA · {stage.code} {stage.track} · {stage.weekday.toUpperCase()} {stage.date}
+  </p>
+  <div class="countdown-tiles">
+    <div class="tile">
+      <span class="tile-value" data-unit="days">00</span>
+      <span class="tile-label">DIAS</span>
+    </div>
+    <div class="tile">
+      <span class="tile-value" data-unit="hours">00</span>
+      <span class="tile-label">HRS</span>
+    </div>
+    <div class="tile">
+      <span class="tile-value" data-unit="minutes">00</span>
+      <span class="tile-label">MIN</span>
+    </div>
+    <div class="tile tile-accent">
+      <span class="tile-value" data-unit="seconds">00</span>
+      <span class="tile-label">SEG</span>
+    </div>
+  </div>
+  <p class="countdown-live" hidden>AO VIVO</p>
+</div>
+
+<script src="./countdown.js"></script>
+
+<style>
+  .countdown {
+    margin-top: var(--sp-4);
+    padding: var(--sp-4);
+    border-radius: var(--r-card);
+    background: var(--raised);
+    border: 1px solid var(--line);
+  }
+
+  .countdown-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-2);
+    margin-top: var(--sp-3);
+  }
+
+  .tile {
+    height: var(--h-count-tile);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: var(--r-tile);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+  }
+
+  .tile-accent {
+    border-color: var(--accent);
+  }
+
+  .tile-value {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tile-accent .tile-value {
+    color: var(--accent);
+  }
+
+  .tile-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+  }
+
+  .countdown-live {
+    margin-top: var(--sp-3);
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-align: center;
+  }
+</style>
