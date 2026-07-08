@@ -70,18 +70,16 @@ import { season, circuits } from '../data';
 
   .track-map {
     position: relative;
-    height: 140px;
-    overflow: hidden;
   }
 
   .track-map-image {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
   }
 
   .track-map-skeleton {
-    height: 100%;
+    height: 140px;
     background: repeating-linear-gradient(
       -45deg,
       var(--surface-2),
