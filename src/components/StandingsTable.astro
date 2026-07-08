@@ -12,15 +12,9 @@ const sorted = [...rows].sort((a, b) => a.pos - b.pos);
 const firstGridBIndex = sorted.findIndex((r) => r.grid === 'B');
 
 const stageByCode = new Map<string, Stage>(stages.map((s) => [s.code, s]));
-const availableStageCodes = Object.keys(stageResults).sort(
-  (a, b) => (stageByCode.get(a)?.index ?? 0) - (stageByCode.get(b)?.index ?? 0)
-);
-
-function moveGlyph(move: number) {
-  if (move > 0) return { glyph: `▲${move}`, cls: 'move-up' };
-  if (move < 0) return { glyph: `▼${Math.abs(move)}`, cls: 'move-down' };
-  return { glyph: '—', cls: 'move-flat' };
-}
+const availableStageCodes = Object.keys(stageResults)
+  .filter((code) => stageByCode.has(code))
+  .sort((a, b) => (stageByCode.get(a)?.index ?? 0) - (stageByCode.get(b)?.index ?? 0));
 ---
 
 <div class="standings">
@@ -32,56 +26,55 @@ function moveGlyph(move: number) {
   <div data-view-panel="geral">
     <div class="table-head">
       <span class="col-pos">POS</span>
-      <span class="col-mov">MOV</span>
       <span class="col-name">PILOTO</span>
       <span class="col-pts">PTS</span>
     </div>
 
     <ul class="rows">
       {
-        sorted.map((row, i) => {
-          const move = moveGlyph(row.move);
-          return (
-            <>
-              {i === 0 && <li class="grid-divider">GRID A · ELITE</li>}
-              {i === firstGridBIndex && i !== 0 && <li class="grid-divider">GRID B · ACESSO</li>}
-              <li class="row-item">
-                <button class="row-summary" data-row-toggle={row.id} aria-expanded="false">
-                  <span class="col-pos pos-num">{row.pos}</span>
-                  <span class={`col-mov move ${move.cls}`}>{move.glyph}</span>
-                  <span class="col-name">
+        sorted.map((row, i) => (
+          <>
+            {i === 0 && <li class="grid-divider grid-divider-a">GRID A · ELITE</li>}
+            {i === firstGridBIndex && i !== 0 && <li class="grid-divider grid-divider-b">GRID B · ACESSO</li>}
+            <li class="row-item">
+              <button class="row-summary" data-row-toggle={row.id} aria-expanded="false">
+                <span class="col-pos pos-num">{row.pos}</span>
+                <span class="col-name">
+                  <span class="driver-block">
                     <span class="driver-name">{row.name}</span>
-                    <span class={`badge badge-grid-${row.grid.toLowerCase()}`}>GRID {row.grid}</span>
+                    {/* row.team: rótulo informativo por piloto (standings.json) — não é campeonato de equipes */}
+                    {row.team && <span class="driver-team">{row.team}</span>}
                   </span>
-                  <span class="col-pts pts-num">{row.points}</span>
-                  <span class="chevron" aria-hidden="true">›</span>
-                </button>
-                <div class="row-detail" data-row-detail={row.id} hidden>
-                  <div class="stat">
-                    <span class="stat-value">{row.wins}</span>
-                    <span class="label-mono">VITÓRIAS</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-value">{row.podiums}</span>
-                    <span class="label-mono">PÓDIOS</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-value">{row.bestFinish}</span>
-                    <span class="label-mono">MELHOR</span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-value">{row.penalties}</span>
-                    <span class="label-mono">PENAL.</span>
-                  </div>
-                  <div class="stat stat-gap">
-                    <span class="stat-value">{row.gapToLeader}</span>
-                    <span class="label-mono">GAP P/ LÍDER</span>
-                  </div>
+                  <span class={`badge badge-grid-${row.grid.toLowerCase()}`}>GRID {row.grid}</span>
+                </span>
+                <span class="col-pts pts-num">{row.points}</span>
+                <span class="chevron" aria-hidden="true">›</span>
+              </button>
+              <div class="row-detail" data-row-detail={row.id} hidden>
+                <div class="stat">
+                  <span class="stat-value">{row.wins}</span>
+                  <span class="label-mono">VITÓRIAS</span>
                 </div>
-              </li>
-            </>
-          );
-        })
+                <div class="stat">
+                  <span class="stat-value">{row.podiums}</span>
+                  <span class="label-mono">PÓDIOS</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{row.bestFinish}</span>
+                  <span class="label-mono">MELHOR</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{row.penalties}</span>
+                  <span class="label-mono">PENAL.</span>
+                </div>
+                <div class="stat stat-gap">
+                  <span class="stat-value">{row.gapToLeader}</span>
+                  <span class="label-mono">GAP P/ LÍDER</span>
+                </div>
+              </div>
+            </li>
+          </>
+        ))
       }
     </ul>
   </div>
@@ -171,7 +164,7 @@ function moveGlyph(move: number) {
 
   .table-head {
     display: grid;
-    grid-template-columns: 32px 44px 1fr 48px 16px;
+    grid-template-columns: 36px 1fr 56px 16px;
     padding: 0 var(--sp-3);
     margin-bottom: var(--sp-2);
     font-family: var(--font-mono);
@@ -190,6 +183,29 @@ function moveGlyph(move: number) {
     padding: var(--sp-3) var(--sp-1) var(--sp-1);
   }
 
+  /* Reforço visual dos grupos na vista Geral (vista Por Etapa mantém o .grid-divider simples acima) */
+  .grid-divider-a,
+  .grid-divider-b {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    padding: var(--sp-2) var(--sp-3);
+    margin: var(--sp-3) 0 var(--sp-2);
+    border-radius: var(--r-tile);
+  }
+
+  .grid-divider-a {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+  }
+
+  .grid-divider-b {
+    background: var(--surface-2);
+    color: var(--text-dim);
+    border-left: 3px solid var(--line-strong);
+  }
+
   .row-item {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -201,7 +217,7 @@ function moveGlyph(move: number) {
   .row-summary {
     width: 100%;
     display: grid;
-    grid-template-columns: 32px 44px 1fr 48px 16px;
+    grid-template-columns: 36px 1fr 56px 16px;
     align-items: center;
     min-height: var(--touch-min);
     padding: var(--sp-2) var(--sp-3);
@@ -214,16 +230,6 @@ function moveGlyph(move: number) {
     font-weight: 700;
   }
 
-  .move {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-  }
-
-  .move-up { color: var(--accent); }
-  .move-down { color: var(--danger); }
-  .move-flat { color: var(--text-faint); }
-
   .col-name {
     display: flex;
     align-items: center;
@@ -231,10 +237,25 @@ function moveGlyph(move: number) {
     min-width: 0;
   }
 
+  .driver-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   .driver-name {
     font-family: var(--font-body);
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .driver-team {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--text-faint);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

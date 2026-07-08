@@ -75,6 +75,7 @@ export interface StandingRow {
   pos: number;
   move: number;
   name: string;
+  team?: string;
   grid: Grid;
   points: number;
   wins: number;
