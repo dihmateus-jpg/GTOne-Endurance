@@ -13,12 +13,30 @@ const video = heroVideo();
 
 <Base title="Início">
   <section class="hero">
-    <p class="kicker">{season.kicker}</p>
-    <h1 class="hero-title">
-      ENDURANCE<br />GTONE
-    </h1>
-    <p class="hero-season">SEASON {season.temporada}</p>
-    <p class="hero-tagline">{season.tagline}</p>
+    <div class="hero-heading">
+      {/* Traçado decorativo genérico ("marca d'água" de telemetria). Trocar futuramente pelo path do circuito da próxima etapa. */}
+      <svg
+        class="hero-heading-track"
+        viewBox="0 0 400 260"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="M50,200 C40,150 55,95 110,72 C150,55 165,30 210,32 C255,34 260,68 235,85
+             C210,102 205,125 230,138 C260,155 300,140 320,105 C338,74 320,45 285,50
+             C265,53 255,40 270,28 C300,8 345,20 355,55 C368,95 345,130 315,150
+             C300,160 302,180 320,188 C345,200 350,225 320,235 C280,248 220,242 180,232
+             C130,220 65,235 50,200 Z"
+        />
+      </svg>
+      <p class="kicker">{season.kicker}</p>
+      <h1 class="hero-title">
+        ENDURANCE<br />GTONE
+      </h1>
+      <p class="hero-season">SEASON {season.temporada}</p>
+      <p class="hero-tagline">{season.tagline}</p>
+    </div>
 
     {video && <HeroVideo video={video} />}
 
@@ -92,7 +110,32 @@ const video = heroVideo();
     background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 60%);
   }
 
+  .hero-heading {
+    position: relative;
+  }
+
+  .hero-heading-track {
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    width: calc(100% + 24px);
+    height: 210px;
+    z-index: 0;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.2;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .hero-heading .kicker {
+    position: relative;
+    z-index: 1;
+  }
+
   .hero-title {
+    position: relative;
+    z-index: 1;
     font-family: var(--font-title);
     font-weight: 700;
     font-size: 47px;
@@ -103,6 +146,8 @@ const video = heroVideo();
   }
 
   .hero-season {
+    position: relative;
+    z-index: 1;
     font-family: var(--font-title);
     font-weight: 700;
     font-size: 22px;
@@ -111,6 +156,8 @@ const video = heroVideo();
   }
 
   .hero-tagline {
+    position: relative;
+    z-index: 1;
     font-family: var(--font-body);
     font-size: 13.5px;
     line-height: 1.45;

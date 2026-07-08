@@ -1,5 +1,4 @@
 ---
-import StatusBar from '../components/StatusBar.astro';
 import TabBar from '../components/TabBar.astro';
 import '../styles/tokens.css';
 import '../styles/global.css';
@@ -29,7 +28,6 @@ const { title, description = 'Endurance GTOne — Season 5. Resistência online 
   </head>
   <body>
     <div class="app-shell">
-      <StatusBar />
       <main class="app-content">
         <slot />
       </main>
