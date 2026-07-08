@@ -14,7 +14,7 @@
     "lobby": "21:30",
     "qualifying": "22:05",
     "qualifyingDuracaoMin": 5,
-    "corrida": "22:15",
+    "corrida": "22:00",
     "corridaDuracaoMaxMin": 90,
     "timezone": "America/Sao_Paulo"
   },

@@ -3,102 +3,195 @@ import Base from '../layouts/Base.astro';
 import WhatsAppCTA from '../components/WhatsAppCTA.astro';
 import { season, stages } from '../data';
 
-const { regras, pontuacao, horarios } = season;
+const { regras, pontuacao, horarios, links } = season;
+
+// stages.json: fonte do calendário, da linha do tempo e da etapa final (isFinal)
+const orderedStages = [...stages].sort((a, b) => a.index - b.index);
+const firstStage = orderedStages[0];
+const finalStage = orderedStages.find((s) => s.isFinal) ?? orderedStages[orderedStages.length - 1];
+
+// season.horarios: dia da semana e horário da corrida (formata "22:00" -> "22h")
+function formatHour(hhmm: string) {
+  const [hour, minute] = hhmm.split(':');
+  return minute === '00' ? `${Number(hour)}h` : `${Number(hour)}h${minute}`;
+}
+const horaCorrida = formatHour(horarios.corrida);
+
+// season.regras: tamanho de grid, promoção/rebaixamento e vaga reservada à transmissão
+const gridSize = regras.gridSize;
 const promoveRebaixa = regras.promoveRebaixa;
-const gridFormationRules = Object.entries(regras.grids);
-const [corridaHour, corridaMinute] = horarios.corrida.split(':');
+const gridBase = gridSize - promoveRebaixa;
+const vagaTRPos = gridSize + 1;
+
+// season.pontuacao: comparativo compacto A vs B (3 primeiras posições) + bônus de pole/volta rápida
+const scoringPreview = [0, 1, 2].map((i) => ({
+  pos: i + 1,
+  a: pontuacao.gridA[i],
+  b: pontuacao.gridB[i],
+}));
+const bonusText =
+  pontuacao.bonus.pole === pontuacao.bonus.voltaMaisRapida
+    ? `Pole e volta mais rápida somam +${pontuacao.bonus.pole} cada.`
+    : `Pole soma +${pontuacao.bonus.pole} e volta mais rápida soma +${pontuacao.bonus.voltaMaisRapida}.`;
 ---
 
 <Base title="Sobre" description="Como funciona o formato da temporada Endurance GTOne.">
   <div class="screen">
     <h1 class="screen-title">Como Funciona</h1>
     <p class="screen-subtitle">O FORMATO DA TEMPORADA</p>
-    <p class="label-mono schedule-line">
-      TODA {horarios.dia.toUpperCase()} · {corridaHour}H{corridaMinute}
-    </p>
   </div>
 
+  <!-- 1) O QUE É -->
   <section class="section">
-    <div class="card grid-diagram">
-      <div class="grid-block grid-block-a">
-        <span class="label-mono">GRID A</span>
-        <span class="grid-block-name">ELITE</span>
+    <p class="intro-text">
+      O Endurance GTOne é um campeonato de resistência online no GT7, feito pela comunidade. Toda{' '}
+      {horarios.dia}, às {horaCorrida}, dois grids encaram etapas longas — com pit stop, clima que muda no
+      meio da corrida e regras de verdade. São {orderedStages.length} etapas até o enduro final.
+    </p>
+  </section>
+
+  <!-- 2) POR QUE CORRER AQUI -->
+  <section class="section">
+    <p class="section-label">POR QUE CORRER AQUI</p>
+    <div class="pillars">
+      <div class="pillar">
+        <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6-5 6 5" />
+          <path d="M6 15l6 5 6-5" />
+        </svg>
+        <p class="pillar-title">Seu lugar não é fixo</p>
+        <p class="pillar-detail">Foi bem, sobe de grid; vacilou, desce. Toda {horarios.dia} conta.</p>
       </div>
-      <div class="grid-diagram-mid">
-        <span class="move-line move-down">▼ descem {promoveRebaixa}</span>
-        <span class="move-line move-up">sobem {promoveRebaixa} ▲</span>
+      <div class="pillar">
+        <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l9 5-9 5-9-5 9-5z" />
+          <path d="M3 13l9 5 9-5" />
+        </svg>
+        <p class="pillar-title">Corra no seu nível</p>
+        <p class="pillar-detail">Dois grids paralelos, Elite e Acesso, pra disputa sempre parelha.</p>
+      </div>
+      <div class="pillar">
+        <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.5" />
+          <path d="M12 12l3.2-2.4" />
+          <path d="M12 3.3v2.2M12 18.5v2.2M3.3 12h2.2M18.5 12h2.2" />
+        </svg>
+        <p class="pillar-title">Resistência, não sprint</p>
+        <p class="pillar-detail">
+          Etapas longas, danos reais e pit stop obrigatório: sem estratégia, ninguém vê a bandeirada.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3) A TEMPORADA EM UM ARCO -->
+  <section class="section">
+    <p class="section-label">A TEMPORADA EM UM ARCO</p>
+    <p class="section-text">
+      {orderedStages.length} etapas, toda {horarios.dia}, de {firstStage.date} a {finalStage.date}, terminando
+      no enduro de {finalStage.track}.
+    </p>
+    <div class="timeline" role="list">
+      {
+        orderedStages.map((stage, i) => (
+          <div class="timeline-node" role="listitem" data-first={i === 0 || undefined} data-final={stage.isFinal || undefined}>
+            <span class="timeline-dot" />
+            <span class="timeline-code">{stage.code}</span>
+            {(i === 0 || stage.isFinal) && <span class="timeline-date">{stage.date}</span>}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 4) SUBIR E DESCER -->
+  <section class="section">
+    <p class="section-label">SUBIR E DESCER</p>
+    <p class="section-text">
+      A cada etapa, os {promoveRebaixa} primeiros do Grid B sobem para o A e os {promoveRebaixa} últimos do A
+      descem para o B. Seu desempenho decide onde você corre na semana seguinte.
+    </p>
+
+    <div class="card promotion-diagram">
+      <div class="grid-block grid-block-a">
+        <span class="label-mono">GRID A · ELITE</span>
+        <span class="grid-size">{gridSize}</span>
+      </div>
+      <div class="promotion-arrows">
+        <span class="arrow-line move-down">▼ {promoveRebaixa} descem</span>
+        <span class="arrow-line move-up">{promoveRebaixa} sobem ▲</span>
       </div>
       <div class="grid-block grid-block-b">
-        <span class="label-mono">GRID B</span>
-        <span class="grid-block-name">ACESSO</span>
+        <span class="label-mono">GRID B · ACESSO</span>
+        <span class="grid-size">{gridSize}</span>
       </div>
     </div>
+
+    <p class="rule-note">
+      E1: grids sorteados · E2: definidos pelo ranking · E3 em diante: {gridBase} pelo ranking + {promoveRebaixa}{' '}
+      promovidos/rebaixados.
+    </p>
   </section>
 
+  <!-- 5) REGRAS QUE IMPORTAM -->
   <section class="section">
-    <div class="rule-cards">
-      <div class="card card-accent-border">
-        <p class="rule-title">Janela de box</p>
-        <p class="rule-detail">
-          Parada nos boxes liberada só numa janela de voltas por etapa (definida no calendário de cada corrida) —
-          com exceções para quebra de motor e para chuva.
+    <p class="section-label">REGRAS QUE IMPORTAM</p>
+    <div class="rule-group">
+      <div class="rule-row">
+        <p class="rule-heading">Janela de box</p>
+        <p class="rule-copy">
+          O pit stop só é liberado numa janela de voltas. Fora dela, só em caso de quebra de motor ou chuva.
         </p>
+        <div class="box-window-strip" aria-hidden="true">
+          <span class="box-window-highlight" />
+        </div>
       </div>
 
-      <div class="card card-accent-border">
-        <p class="rule-title">Formação dos grids &amp; promoção/rebaixamento</p>
-        <ul class="grid-rules">
+      <div class="rule-row">
+        <p class="rule-heading">Clima dinâmico</p>
+        <p class="rule-copy">O tempo vira no meio da corrida — quem lê a pista na hora certa larga na frente.</p>
+      </div>
+
+      <div class="rule-row">
+        <p class="rule-heading">Pontuação</p>
+        <p class="rule-copy">O Grid A vale mais pontos que o Grid B. {bonusText}</p>
+        <div class="scoring-compare">
           {
-            gridFormationRules.map(([stageCode, rule]) => (
-              <li>
-                <span class="label-mono grid-rule-code">{stageCode}</span>
-                <span class="rule-detail">{rule}</span>
-              </li>
+            scoringPreview.map(({ pos, a, b }) => (
+              <div class="scoring-compare-row">
+                <span class="label-mono">P{pos}</span>
+                <span class="scoring-value scoring-value-a">{a}</span>
+                <span class="scoring-vs">vs</span>
+                <span class="scoring-value scoring-value-b">{b}</span>
+              </div>
             ))
           }
-        </ul>
-      </div>
-
-      <div class="card card-accent-border">
-        <p class="rule-title">Descarte de etapas</p>
-        <p class="rule-detail">{regras.descarteNota}</p>
-      </div>
-
-      <div class="card card-accent-border">
-        <p class="rule-title">Pontuação por grid</p>
-        <div class="scoring-columns">
-          <div class="scoring-column">
-            <span class="label-mono">GRID A</span>
-            <ol class="scoring-list">
-              {pontuacao.gridA.map((pts) => <li>{pts}</li>)}
-            </ol>
-          </div>
-          <div class="scoring-column">
-            <span class="label-mono">GRID B</span>
-            <ol class="scoring-list">
-              {pontuacao.gridB.map((pts) => <li>{pts}</li>)}
-            </ol>
-          </div>
         </div>
-        <p class="rule-detail scoring-bonus">
-          + {pontuacao.bonus.pole} pt pole position · + {pontuacao.bonus.voltaMaisRapida} pt volta mais rápida.
+      </div>
+
+      <div class="rule-row">
+        <p class="rule-heading">Descarte de {regras.descarteEtapas} etapas</p>
+        <p class="rule-copy">
+          Seus {regras.descarteEtapas} piores resultados são descartados no fim da temporada — uma noite ruim
+          não te enterra.
         </p>
       </div>
 
-      <div class="card card-accent-border">
-        <p class="rule-title">Vaga TR</p>
-        <p class="rule-detail">{regras.vagaTR}</p>
+      <div class="rule-row">
+        <p class="rule-heading">Vaga TR</p>
+        <p class="rule-copy">A {vagaTRPos}ª vaga é reservada à transmissão e não pontua.</p>
       </div>
     </div>
   </section>
 
+  <!-- 6) CALENDÁRIO -->
   <section class="section">
     <div class="section-head">
-      <span class="section-label">CALENDÁRIO · {stages.length} ETAPAS</span>
+      <span class="section-label">CALENDÁRIO · {orderedStages.length} ETAPAS</span>
     </div>
     <ul class="calendar">
       {
-        stages.map((stage) => (
+        orderedStages.map((stage) => (
           <li class="calendar-row">
             <span class="calendar-code">{stage.code}</span>
             <span class="calendar-track">{stage.track}</span>
@@ -110,11 +203,13 @@ const [corridaHour, corridaMinute] = horarios.corrida.split(':');
     </ul>
   </section>
 
+  <!-- 7) ENTRAR NO GRID -->
   <section class="section">
+    <p class="section-label">ENTRAR NO GRID</p>
     <div class="card card-accent-border signup-cta">
       <p class="kicker">AINDA NÃO ESTÁ NO GRID?</p>
-      <p class="rule-detail">Inscrições abertas para a temporada {season.temporada}.</p>
-      <a class="btn signup-button" href={season.links.inscricao} target="_blank" rel="noopener noreferrer">
+      <p class="rule-copy">Inscrições abertas para a temporada {season.temporada}.</p>
+      <a class="btn signup-button" href={links.inscricao} target="_blank" rel="noopener noreferrer">
         QUERO CORRER →
       </a>
     </div>
@@ -124,14 +219,130 @@ const [corridaHour, corridaMinute] = horarios.corrida.split(':');
 </Base>
 
 <style>
-  .schedule-line {
-    margin-top: var(--sp-2);
+  /* 1) O QUE É */
+  .intro-text {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text);
   }
 
-  .grid-diagram {
+  /* 2) POR QUE CORRER AQUI */
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    margin-top: var(--sp-3);
+  }
+
+  .pillar {
+    padding: var(--sp-4);
+    border-radius: var(--r-card);
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+  }
+
+  .pillar-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--accent);
+    margin-bottom: var(--sp-2);
+  }
+
+  .pillar-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .pillar-detail {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: var(--sp-1);
+  }
+
+  /* Texto de apoio compartilhado (seções 3 e 4) */
+  .section-text {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin-top: var(--sp-1);
+  }
+
+  /* 3) TIMELINE */
+  .timeline {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-1);
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--line-strong);
+  }
+
+  .timeline-node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--line-strong);
+    z-index: 1;
+  }
+
+  .timeline-node[data-first] .timeline-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: var(--glow-led);
+  }
+
+  .timeline-node[data-final] .timeline-dot {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .timeline-code {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-faint);
+  }
+
+  .timeline-node[data-first] .timeline-code,
+  .timeline-node[data-final] .timeline-code {
+    color: var(--text);
+  }
+
+  .timeline-date {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  /* 4) SUBIR E DESCER */
+  .promotion-diagram {
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
+    margin-top: var(--sp-3);
   }
 
   .grid-block {
@@ -152,16 +363,15 @@ const [corridaHour, corridaMinute] = horarios.corrida.split(':');
     background: var(--surface-2);
   }
 
-  .grid-block-name {
+  .grid-size {
     display: block;
     font-family: var(--font-title);
     font-weight: 700;
-    font-size: 20px;
-    text-transform: uppercase;
+    font-size: 26px;
     margin-top: 2px;
   }
 
-  .grid-diagram-mid {
+  .promotion-arrows {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -173,72 +383,105 @@ const [corridaHour, corridaMinute] = horarios.corrida.split(':');
     padding: 0 var(--sp-2);
   }
 
-  .move-down { color: var(--danger); }
-  .move-up { color: var(--accent); }
+  .move-down {
+    color: var(--danger);
+  }
 
-  .rule-cards {
+  .move-up {
+    color: var(--accent);
+  }
+
+  .rule-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: var(--sp-3);
+    line-height: 1.5;
+  }
+
+  /* 5) REGRAS QUE IMPORTAM */
+  .rule-group {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-3);
+    margin-top: var(--sp-3);
   }
 
-  .rule-title {
+  .rule-row {
+    padding: var(--sp-3) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rule-row:last-child {
+    border-bottom: none;
+  }
+
+  .rule-heading {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14.5px;
+    color: var(--text);
   }
 
-  .rule-detail {
+  .rule-copy {
     font-family: var(--font-body);
     font-size: 13px;
     color: var(--text-dim);
     margin-top: var(--sp-1);
   }
 
-  .grid-rules {
+  .box-window-strip {
+    position: relative;
+    height: 10px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    margin-top: var(--sp-3);
+    overflow: hidden;
+  }
+
+  .box-window-highlight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 38%;
+    width: 26%;
+    background: var(--accent);
+    border-radius: 6px;
+  }
+
+  .scoring-compare {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
-    margin-top: var(--sp-2);
-  }
-
-  .grid-rules li {
-    display: flex;
-    gap: var(--sp-2);
-    align-items: baseline;
-  }
-
-  .grid-rule-code {
-    color: var(--accent);
-    flex-shrink: 0;
-    width: 44px;
-  }
-
-  .scoring-columns {
-    display: flex;
-    gap: var(--sp-5);
-    margin-top: var(--sp-2);
-  }
-
-  .scoring-column {
-    flex: 1;
-  }
-
-  .scoring-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: var(--sp-1);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text);
-    padding-left: 1.1em;
-  }
-
-  .scoring-bonus {
+    gap: var(--sp-1);
     margin-top: var(--sp-3);
   }
 
+  .scoring-compare-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .scoring-value {
+    min-width: 28px;
+    font-weight: 600;
+  }
+
+  .scoring-value-a {
+    color: var(--accent);
+  }
+
+  .scoring-value-b {
+    color: var(--text-dim);
+  }
+
+  .scoring-vs {
+    color: var(--text-faint);
+    font-size: 10px;
+  }
+
+  /* 6) CALENDÁRIO */
   .calendar {
     display: flex;
     flex-direction: column;
@@ -274,6 +517,7 @@ const [corridaHour, corridaMinute] = horarios.corrida.split(':');
     color: var(--text-dim);
   }
 
+  /* 7) ENTRAR NO GRID */
   .signup-cta {
     text-align: left;
   }
