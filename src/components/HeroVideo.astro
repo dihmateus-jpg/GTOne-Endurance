@@ -80,9 +80,14 @@ const { video } = Astro.props;
     border-radius: 50%;
     background: var(--accent);
     color: var(--bg);
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     font-size: 16px;
+  }
+
+  /* só aparece quando hero-video.js remove o atributo hidden (fallback de prefers-reduced-motion) */
+  .hero-video-play:not([hidden]) {
+    display: flex;
   }
 </style>
