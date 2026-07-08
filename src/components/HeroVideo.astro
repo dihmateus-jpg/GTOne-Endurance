@@ -11,38 +11,50 @@ const { video } = Astro.props;
 <div class="hero-video">
   {
     video.type === 'youtube' && video.youtubeId ? (
-      <button
-        class="lite-embed hero-video-el"
-        data-yt-id={video.youtubeId}
-        aria-label={`Reproduzir ${video.title ?? 'vídeo'}`}
-      >
-        <img
-          class="lite-embed-thumb"
-          src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`}
-          alt=""
-          loading="lazy"
-        />
-        <span class="lite-embed-play" aria-hidden="true">▶</span>
-      </button>
+      <>
+        <button
+          class="lite-embed hero-video-el"
+          data-yt-id={video.youtubeId}
+          aria-label={`Reproduzir ${video.title ?? 'vídeo'}`}
+        >
+          <img
+            class="lite-embed-thumb"
+            src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`}
+            alt=""
+            loading="lazy"
+          />
+          <span class="lite-embed-play" aria-hidden="true">▶</span>
+        </button>
+        <script src="./lite-embed.js"></script>
+      </>
     ) : video.src ? (
-      <video
-        class="hero-video-el"
-        controls
-        playsinline
-        preload="none"
-        poster={video.poster || undefined}
-        aria-label={video.title ?? 'Vídeo'}
-      >
-        <source src={video.src} type="video/mp4" />
-      </video>
+      <>
+        <video
+          class="hero-video-el"
+          data-hero-video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster={video.poster || undefined}
+          aria-label={video.title ?? 'Vídeo'}
+        >
+          <source src={video.src} type="video/mp4" />
+        </video>
+        {/* Fallback para quem prefere menos movimento: hero-video.js revela este botão e pausa o autoplay */}
+        <button class="hero-video-play" data-hero-video-play type="button" aria-label="Reproduzir vídeo" hidden>
+          <span aria-hidden="true">▶</span>
+        </button>
+        <script src="./hero-video.js"></script>
+      </>
     ) : null
   }
 </div>
 
-<script src="./lite-embed.js"></script>
-
 <style>
   .hero-video {
+    position: relative;
     margin-top: var(--sp-4);
     aspect-ratio: 16 / 9;
     border-radius: var(--r-card);
@@ -56,5 +68,21 @@ const { video } = Astro.props;
     height: 100%;
     display: block;
     object-fit: cover;
+  }
+
+  .hero-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
   }
 </style>
