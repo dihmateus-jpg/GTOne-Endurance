@@ -34,6 +34,7 @@ export interface Season {
   links: {
     whatsapp: string;
     inscricao: string;
+    regulamento: string;
   };
   heroVideo?: HeroVideo;
 }

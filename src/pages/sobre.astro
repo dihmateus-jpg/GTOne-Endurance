@@ -244,6 +244,10 @@ const lapMarkers = [
   <!-- 7) ENTRAR NO GRID -->
   <section class="section">
     <p class="section-label">ENTRAR NO GRID</p>
+    <p class="regulamento-link">
+      Para todos os detalhes do evento, consulte o{' '}
+      <a href={links.regulamento} target="_blank" rel="noopener">regulamento completo</a>.
+    </p>
     <div class="card card-accent-border signup-cta">
       <p class="kicker">AINDA NÃO ESTÁ NO GRID?</p>
       <p class="rule-copy">Inscrições abertas para a temporada {season.temporada}.</p>
@@ -646,6 +650,14 @@ const lapMarkers = [
   }
 
   /* 7) ENTRAR NO GRID */
+  .regulamento-link {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--text-faint);
+    margin-top: var(--sp-2);
+    margin-bottom: var(--sp-4);
+  }
+
   .signup-cta {
     text-align: left;
   }
