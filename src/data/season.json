@@ -49,6 +49,14 @@
     "inscricao": "https://forms.gle/vjmAHRZwLn1YjTyJA"
   },
 
+  "heroVideo": {
+    "type": "file",
+    "src": "/wec-intro-720p.mp4",
+    "youtubeId": "",
+    "poster": "/wec-intro-poster.jpg",
+    "title": "Contexto da temporada"
+  },
+
   "diferido": {
     "nota": "NÃO implementar no v1 sem pedido explícito. Reservar espaço no layout.",
     "itens": ["Campeonato de equipes", "Badges / conquistas"]

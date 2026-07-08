@@ -35,6 +35,15 @@ export interface Season {
     whatsapp: string;
     inscricao: string;
   };
+  heroVideo?: HeroVideo;
+}
+
+export interface HeroVideo {
+  type: 'youtube' | 'file';
+  src?: string;
+  youtubeId?: string;
+  poster?: string;
+  title?: string;
 }
 
 export interface Stage {

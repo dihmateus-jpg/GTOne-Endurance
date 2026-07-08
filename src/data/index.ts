@@ -11,6 +11,7 @@ import type {
   Standings,
   StageResultsByCode,
   Highlights,
+  HeroVideo,
 } from './types';
 
 export const season = seasonJson as unknown as Season;
@@ -42,4 +43,12 @@ export function circuitByCode(code: string): Circuit | undefined {
 
 export function topStandings(count: number) {
   return [...standings.rows].sort((a, b) => a.pos - b.pos).slice(0, count);
+}
+
+export function heroVideo(): HeroVideo | null {
+  const video = season.heroVideo;
+  if (!video) return null;
+  if (video.type === 'youtube' && video.youtubeId) return video;
+  if (video.type === 'file' && video.src) return video;
+  return null;
 }

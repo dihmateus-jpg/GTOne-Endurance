@@ -1,13 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import Countdown from '../components/Countdown.astro';
-import WhatsAppCTA from '../components/WhatsAppCTA.astro';
-import { season, nextStage, topStandings, highlights } from '../data';
+import HeroVideo from '../components/HeroVideo.astro';
+import { season, nextStage, topStandings, highlights, heroVideo } from '../data';
 
 const upcoming = nextStage();
 const top3 = topStandings(3);
 const isPreSeason = season.status === 'pre-season';
 const summary = highlights.lastStage ? highlights.exemplo : null;
+const video = heroVideo();
 ---
 
 <Base title="Início">
@@ -18,6 +19,8 @@ const summary = highlights.lastStage ? highlights.exemplo : null;
     </h1>
     <p class="hero-season">SEASON {season.temporada}</p>
     <p class="hero-tagline">{season.tagline}</p>
+
+    {video && <HeroVideo video={video} />}
 
     {upcoming && <Countdown stage={upcoming} />}
   </section>
@@ -81,8 +84,6 @@ const summary = highlights.lastStage ? highlights.exemplo : null;
       </section>
     )
   }
-
-  <WhatsAppCTA />
 </Base>
 
 <style>

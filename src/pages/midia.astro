@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import WhatsAppCTA from '../components/WhatsAppCTA.astro';
 import { season, stages } from '../data';
 
 const orderedStages = [...stages].sort((a, b) => a.index - b.index);
@@ -63,26 +62,9 @@ const orderedStages = [...stages].sort((a, b) => a.index - b.index);
       ))
     }
   </section>
-
-  <WhatsAppCTA />
 </Base>
 
-<script>
-  function mountEmbed(button: HTMLElement) {
-    const id = button.dataset.ytId;
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
-    iframe.title = 'YouTube video player';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    iframe.className = 'lite-embed-iframe';
-    button.replaceWith(iframe);
-  }
-
-  document.querySelectorAll<HTMLElement>('.lite-embed').forEach((button) => {
-    button.addEventListener('click', () => mountEmbed(button));
-  });
-</script>
+<script src="../components/lite-embed.js"></script>
 
 <style>
   .submit-cta {
@@ -130,44 +112,6 @@ const orderedStages = [...stages].sort((a, b) => a.index - b.index);
     display: flex;
     flex-direction: column;
     gap: var(--sp-1);
-  }
-
-  .lite-embed {
-    position: relative;
-    height: var(--h-video-embed);
-    border-radius: var(--r-card);
-    overflow: hidden;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-  }
-
-  .lite-embed-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .lite-embed-play {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-  }
-
-  .lite-embed-iframe {
-    width: 100%;
-    height: var(--h-video-embed);
-    border: 0;
-    border-radius: var(--r-card);
   }
 
   .media-title {

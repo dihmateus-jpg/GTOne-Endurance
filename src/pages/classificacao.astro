@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import StandingsTable from '../components/StandingsTable.astro';
-import WhatsAppCTA from '../components/WhatsAppCTA.astro';
 import { season, standings, stages } from '../data';
 
 const isPreSeason = season.status === 'pre-season';
@@ -38,8 +37,6 @@ const firstStage = stages.find((s) => s.index === 1);
       )
     }
   </section>
-
-  <WhatsAppCTA />
 </Base>
 
 <style>
