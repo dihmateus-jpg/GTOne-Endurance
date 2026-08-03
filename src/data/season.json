@@ -4,13 +4,13 @@
   "temporada": 5,
   "ano": 2026,
   "status": "pre-season",
-  "statusNota": "Temporada ainda não iniciou (E1 em 23/07). Enquanto status='pre-season', a Home esconde 'Resumo da última etapa' e a Classificação mostra estado pré-temporada. Após a E1, mudar para 'em-andamento' e substituir os seeds fictícios por dados reais.",
+  "statusNota": "Temporada ainda não iniciou (E1 em 10/08). Enquanto status='pre-season', a Home esconde 'Resumo da última etapa' e a Classificação mostra estado pré-temporada. Após a E1, mudar para 'em-andamento' e substituir os seeds fictícios por dados reais.",
 
-  "tagline": "Resistência online no GT7. Toda quinta, 22h. Dois grids, oito etapas, uma temporada.",
+  "tagline": "Resistência online no GT7. Toda segunda, 22h. Dois grids, oito etapas, uma temporada.",
   "kicker": "TEMPORADA 05 · 2026",
 
   "horarios": {
-    "dia": "quinta",
+    "dia": "segunda",
     "lobby": "21:30",
     "qualifying": "22:05",
     "qualifyingDuracaoMin": 5,
